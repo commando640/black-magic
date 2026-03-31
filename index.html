@@ -1,0 +1,1677 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>অন্ধকারের আর্কাইভ — কালো যাদু ও কুফরির রহস্য</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Noto+Serif+Bengali:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ===== ROOT VARIABLES ===== */
+:root {
+  --black: #030303;
+  --deep: #0a0608;
+  --card: #110d0f;
+  --border: #2a1a1f;
+  --crimson: #8b0000;
+  --blood: #c0392b;
+  --ember: #e74c3c;
+  --gold: #c9a84c;
+  --gold-light: #f0d080;
+  --gold-dim: #7a6030;
+  --silver: #a0a0b0;
+  --mist: #6a5a6a;
+  --text: #d4c8c0;
+  --text-dim: #8a7a78;
+  --glow-red: rgba(139,0,0,0.4);
+  --glow-gold: rgba(201,168,76,0.3);
+}
+
+/* ===== RESET ===== */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; overflow-x: hidden; }
+body {
+  background: var(--black);
+  color: var(--text);
+  font-family: 'Noto Serif Bengali', 'EB Garamond', serif;
+  cursor: none;
+  overflow-x: hidden;
+}
+
+/* ===== CUSTOM CURSOR ===== */
+#cursor {
+  width: 14px; height: 14px;
+  background: var(--gold);
+  border-radius: 50%;
+  position: fixed; top:0; left:0;
+  pointer-events: none;
+  z-index: 99999;
+  transform: translate(-50%,-50%);
+  transition: transform 0.1s, background 0.2s;
+  mix-blend-mode: difference;
+}
+#cursor-trail {
+  width: 36px; height: 36px;
+  border: 1px solid var(--gold);
+  border-radius: 50%;
+  position: fixed; top:0; left:0;
+  pointer-events: none;
+  z-index: 99998;
+  transform: translate(-50%,-50%);
+  transition: transform 0.18s ease, width 0.2s, height 0.2s;
+  opacity: 0.5;
+}
+body:hover #cursor { transform: translate(-50%,-50%) scale(1); }
+a:hover ~ #cursor, button:hover ~ #cursor { transform: translate(-50%,-50%) scale(2.5); }
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--deep); }
+::-webkit-scrollbar-thumb { background: var(--crimson); border-radius: 3px; }
+
+/* ===== CANVAS PARTICLES ===== */
+#particles-canvas {
+  position: fixed; top:0; left:0;
+  width:100%; height:100%;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.6;
+}
+
+/* ===== NAVBAR ===== */
+nav {
+  position: fixed; top:0; left:0; width:100%;
+  z-index: 1000;
+  padding: 0 4rem;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 72px;
+  background: linear-gradient(180deg, rgba(3,3,3,0.97) 0%, transparent 100%);
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.3s, background 0.3s;
+}
+nav.scrolled {
+  background: rgba(3,3,3,0.97);
+  border-bottom-color: var(--border);
+}
+.nav-logo {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: 1rem;
+  color: var(--gold);
+  letter-spacing: 0.1em;
+  text-decoration: none;
+  display: flex; align-items: center; gap: 0.6rem;
+}
+.nav-logo .sigil { font-size: 1.4rem; filter: drop-shadow(0 0 6px var(--gold)); }
+.nav-links { display:flex; gap:2.5rem; list-style:none; }
+.nav-links a {
+  font-family: 'Cinzel', serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  text-decoration: none;
+  position: relative;
+  transition: color 0.3s;
+}
+.nav-links a::after {
+  content:'';
+  position:absolute; bottom:-4px; left:0;
+  width:0; height:1px;
+  background: var(--gold);
+  transition: width 0.3s;
+}
+.nav-links a:hover { color: var(--gold); }
+.nav-links a:hover::after { width:100%; }
+.nav-cta {
+  font-family: 'Cinzel', serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  border: 1px solid var(--gold-dim);
+  padding: 0.5rem 1.2rem;
+  text-decoration: none;
+  transition: all 0.3s;
+}
+.nav-cta:hover {
+  background: var(--gold);
+  color: var(--black);
+  box-shadow: 0 0 20px var(--glow-gold);
+}
+.burger { display:none; flex-direction:column; gap:5px; cursor:pointer; }
+.burger span { width:24px; height:1px; background:var(--gold); display:block; transition:0.3s; }
+
+/* ===== HERO ===== */
+#hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+  z-index: 1;
+}
+.hero-bg {
+  position: absolute; inset:0;
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 50%, rgba(80,0,0,0.25) 0%, transparent 70%),
+    radial-gradient(ellipse 30% 40% at 20% 80%, rgba(60,0,0,0.2) 0%, transparent 60%),
+    linear-gradient(180deg, #030303 0%, #0a0305 50%, #030303 100%);
+}
+.hero-sigil {
+  position: absolute;
+  width: 600px; height: 600px;
+  top:50%; left:50%;
+  transform: translate(-50%,-50%);
+  opacity: 0.06;
+  animation: rotateSlow 60s linear infinite;
+}
+@keyframes rotateSlow { to { transform: translate(-50%,-50%) rotate(360deg); } }
+.hero-content {
+  position: relative; z-index: 2;
+  text-align: center;
+  max-width: 900px;
+  padding: 0 2rem;
+}
+.hero-eyebrow {
+  font-family: 'Cinzel', serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--blood);
+  margin-bottom: 1.5rem;
+  animation: fadeUp 1s ease 0.2s both;
+}
+.hero-title {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: clamp(2.2rem, 6vw, 5rem);
+  font-weight: 900;
+  line-height: 1.1;
+  color: var(--gold-light);
+  text-shadow: 0 0 40px var(--glow-gold), 0 0 80px rgba(201,168,76,0.15);
+  margin-bottom: 0.5rem;
+  animation: fadeUp 1s ease 0.4s both;
+}
+.hero-subtitle {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(0.9rem, 2vw, 1.3rem);
+  color: var(--crimson);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+  animation: fadeUp 1s ease 0.5s both;
+}
+.hero-desc {
+  font-family: 'Noto Serif Bengali', serif;
+  font-size: 1.05rem;
+  color: var(--text-dim);
+  line-height: 1.9;
+  max-width: 620px;
+  margin: 0 auto 3rem;
+  animation: fadeUp 1s ease 0.7s both;
+}
+.hero-buttons {
+  display:flex; gap:1.2rem; justify-content:center; flex-wrap:wrap;
+  animation: fadeUp 1s ease 0.9s both;
+}
+.btn-primary {
+  font-family: 'Cinzel', serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 1rem 2.5rem;
+  background: var(--crimson);
+  color: #fff;
+  border: none; text-decoration: none;
+  position: relative; overflow: hidden;
+  transition: all 0.3s;
+  box-shadow: 0 0 20px var(--glow-red);
+}
+.btn-primary::before {
+  content:''; position:absolute; inset:0;
+  background: var(--blood);
+  transform: translateX(-100%);
+  transition: transform 0.3s;
+}
+.btn-primary:hover::before { transform: translateX(0); }
+.btn-primary span { position:relative; z-index:1; }
+.btn-primary:hover { box-shadow: 0 0 40px var(--glow-red); }
+.btn-outline {
+  font-family: 'Cinzel', serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 1rem 2.5rem;
+  border: 1px solid var(--gold-dim);
+  color: var(--gold);
+  text-decoration: none;
+  transition: all 0.3s;
+}
+.btn-outline:hover {
+  background: rgba(201,168,76,0.08);
+  border-color: var(--gold);
+  box-shadow: 0 0 20px var(--glow-gold);
+}
+.hero-scroll {
+  position:absolute; bottom:2.5rem; left:50%;
+  transform:translateX(-50%);
+  display:flex; flex-direction:column; align-items:center; gap:0.5rem;
+  animation: fadeUp 1s ease 1.2s both;
+}
+.hero-scroll span {
+  font-family:'Cinzel',serif; font-size:0.6rem;
+  letter-spacing:0.3em; text-transform:uppercase;
+  color: var(--text-dim);
+}
+.scroll-line {
+  width:1px; height:50px;
+  background:linear-gradient(180deg, var(--gold-dim), transparent);
+  animation: scrollPulse 2s ease-in-out infinite;
+}
+@keyframes scrollPulse {
+  0%,100% { transform:scaleY(1); opacity:1; }
+  50% { transform:scaleY(0.6); opacity:0.4; }
+}
+
+/* ===== STATS STRIP ===== */
+.stats-strip {
+  position:relative; z-index:2;
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+  background: rgba(10,6,8,0.8);
+  display:grid; grid-template-columns:repeat(4,1fr);
+  backdrop-filter: blur(10px);
+}
+.stat-item {
+  padding:2rem;
+  text-align:center;
+  border-right:1px solid var(--border);
+  transition: background 0.3s;
+}
+.stat-item:last-child { border-right:none; }
+.stat-item:hover { background: rgba(139,0,0,0.05); }
+.stat-num {
+  font-family:'Cinzel Decorative',serif;
+  font-size:2.2rem;
+  color:var(--gold);
+  display:block;
+}
+.stat-label {
+  font-family:'Cinzel',serif;
+  font-size:0.65rem;
+  letter-spacing:0.2em;
+  text-transform:uppercase;
+  color:var(--text-dim);
+  margin-top:0.3rem;
+}
+
+/* ===== SECTION COMMON ===== */
+section { position:relative; z-index:2; }
+.section-header {
+  text-align:center;
+  margin-bottom:4rem;
+}
+.section-tag {
+  font-family:'Cinzel',serif;
+  font-size:0.65rem;
+  letter-spacing:0.4em;
+  text-transform:uppercase;
+  color:var(--blood);
+  display:block;
+  margin-bottom:1rem;
+}
+.section-title {
+  font-family:'Cinzel Decorative',serif;
+  font-size:clamp(1.6rem,3.5vw,2.8rem);
+  color:var(--gold-light);
+  text-shadow: 0 0 30px var(--glow-gold);
+  line-height:1.2;
+}
+.section-line {
+  width:80px; height:1px;
+  background:linear-gradient(90deg, transparent, var(--gold-dim), transparent);
+  margin:1.2rem auto 0;
+}
+.section-desc {
+  max-width:580px;
+  margin:1rem auto 0;
+  color:var(--text-dim);
+  line-height:1.9;
+  font-size:0.95rem;
+}
+
+/* ===== CATEGORIES ===== */
+#categories {
+  padding: 7rem 4rem;
+  background: linear-gradient(180deg, var(--black) 0%, var(--deep) 50%, var(--black) 100%);
+}
+.categories-grid {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:1.5px;
+  max-width:1200px;
+  margin:0 auto;
+  border:1.5px solid var(--border);
+}
+.cat-card {
+  background:var(--card);
+  padding:2.5rem 2rem;
+  position:relative;
+  overflow:hidden;
+  transition:all 0.4s;
+  cursor:pointer;
+}
+.cat-card::before {
+  content:'';
+  position:absolute; top:0; left:0;
+  width:100%; height:2px;
+  background:linear-gradient(90deg, transparent, var(--crimson), transparent);
+  transform:scaleX(0);
+  transition:transform 0.4s;
+}
+.cat-card::after {
+  content:'';
+  position:absolute; inset:0;
+  background:radial-gradient(ellipse at 50% 0%, rgba(139,0,0,0.08), transparent 70%);
+  opacity:0;
+  transition:opacity 0.4s;
+}
+.cat-card:hover::before { transform:scaleX(1); }
+.cat-card:hover::after { opacity:1; }
+.cat-card:hover { transform:translateY(-4px); box-shadow:0 20px 60px rgba(0,0,0,0.6); }
+.cat-icon {
+  font-size:2.5rem;
+  display:block;
+  margin-bottom:1.2rem;
+  filter:drop-shadow(0 0 8px var(--glow-red));
+  transition:filter 0.3s;
+}
+.cat-card:hover .cat-icon { filter:drop-shadow(0 0 16px var(--glow-red)); }
+.cat-name {
+  font-family:'Cinzel',serif;
+  font-size:1rem;
+  color:var(--gold);
+  margin-bottom:0.8rem;
+  letter-spacing:0.05em;
+}
+.cat-desc {
+  font-size:0.88rem;
+  color:var(--text-dim);
+  line-height:1.8;
+}
+.cat-badge {
+  position:absolute; top:1rem; right:1rem;
+  font-family:'Cinzel',serif;
+  font-size:0.55rem;
+  letter-spacing:0.2em;
+  text-transform:uppercase;
+  color:var(--crimson);
+  border:1px solid var(--crimson);
+  padding:0.2rem 0.5rem;
+  opacity:0.7;
+}
+
+/* ===== FEATURED ARTICLE ===== */
+#featured {
+  padding:7rem 4rem;
+  background:var(--black);
+}
+.featured-inner {
+  max-width:1200px;
+  margin:0 auto;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:0;
+  border:1px solid var(--border);
+}
+.featured-visual {
+  background:
+    linear-gradient(135deg, rgba(80,0,0,0.4), rgba(10,6,8,0.9)),
+    repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(139,0,0,0.03) 20px, rgba(139,0,0,0.03) 21px);
+  display:flex; align-items:center; justify-content:center;
+  min-height:400px;
+  position:relative;
+  overflow:hidden;
+}
+.featured-sigil {
+  font-size:10rem;
+  opacity:0.15;
+  animation:rotateSlow 40s linear infinite;
+}
+.featured-label {
+  position:absolute; top:1.5rem; left:1.5rem;
+  font-family:'Cinzel',serif;
+  font-size:0.6rem;
+  letter-spacing:0.3em;
+  text-transform:uppercase;
+  color:#fff;
+  background:var(--crimson);
+  padding:0.3rem 0.8rem;
+}
+.featured-body {
+  padding:3.5rem;
+  display:flex; flex-direction:column; justify-content:center;
+  border-left:1px solid var(--border);
+}
+.feat-meta {
+  font-family:'Cinzel',serif;
+  font-size:0.62rem;
+  letter-spacing:0.25em;
+  text-transform:uppercase;
+  color:var(--mist);
+  margin-bottom:1.2rem;
+}
+.feat-title {
+  font-family:'Cinzel',serif;
+  font-size:1.6rem;
+  color:var(--gold-light);
+  line-height:1.35;
+  margin-bottom:1rem;
+}
+.feat-excerpt {
+  font-size:0.92rem;
+  color:var(--text-dim);
+  line-height:2;
+  margin-bottom:2rem;
+}
+.feat-tags { display:flex; flex-wrap:wrap; gap:0.5rem; margin-bottom:2rem; }
+.tag {
+  font-family:'Cinzel',serif;
+  font-size:0.58rem;
+  letter-spacing:0.15em;
+  text-transform:uppercase;
+  color:var(--blood);
+  border:1px solid rgba(139,0,0,0.4);
+  padding:0.25rem 0.6rem;
+}
+
+/* ===== ARCHIVE GRID ===== */
+#archive {
+  padding:7rem 4rem;
+  background:var(--deep);
+}
+.archive-toolbar {
+  max-width:1200px;
+  margin:0 auto 3rem;
+  display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem;
+}
+.search-box {
+  display:flex; align-items:center; gap:0.5rem;
+  border:1px solid var(--border);
+  background:var(--card);
+  padding:0.6rem 1rem;
+  min-width:280px;
+}
+.search-box input {
+  background:none; border:none; outline:none;
+  color:var(--text);
+  font-family:'Noto Serif Bengali',serif;
+  font-size:0.9rem;
+  width:100%;
+}
+.search-box input::placeholder { color:var(--text-dim); }
+.search-icon { color:var(--gold-dim); font-size:0.9rem; }
+.filter-btns { display:flex; gap:0.5rem; flex-wrap:wrap; }
+.filter-btn {
+  font-family:'Cinzel',serif;
+  font-size:0.62rem;
+  letter-spacing:0.15em;
+  text-transform:uppercase;
+  padding:0.45rem 1rem;
+  border:1px solid var(--border);
+  background:transparent;
+  color:var(--text-dim);
+  cursor:pointer;
+  transition:all 0.2s;
+}
+.filter-btn:hover, .filter-btn.active {
+  border-color:var(--gold-dim);
+  color:var(--gold);
+  background:rgba(201,168,76,0.05);
+}
+.archive-grid {
+  max-width:1200px;
+  margin:0 auto;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:1.5rem;
+}
+.article-card {
+  background:var(--card);
+  border:1px solid var(--border);
+  overflow:hidden;
+  transition:all 0.35s;
+  cursor:pointer;
+  position:relative;
+}
+.article-card::after {
+  content:'';
+  position:absolute; bottom:0; left:0;
+  width:100%; height:2px;
+  background:linear-gradient(90deg,var(--crimson),var(--gold));
+  transform:scaleX(0);
+  transition:transform 0.35s;
+  transform-origin:left;
+}
+.article-card:hover { transform:translateY(-6px); box-shadow:0 30px 60px rgba(0,0,0,0.7); border-color:var(--border); }
+.article-card:hover::after { transform:scaleX(1); }
+.card-visual {
+  height:180px;
+  display:flex; align-items:center; justify-content:center;
+  position:relative;
+  overflow:hidden;
+  font-size:4rem;
+}
+.card-visual-bg {
+  position:absolute; inset:0;
+}
+.card-body { padding:1.5rem; }
+.card-category {
+  font-family:'Cinzel',serif;
+  font-size:0.58rem;
+  letter-spacing:0.25em;
+  text-transform:uppercase;
+  color:var(--blood);
+  margin-bottom:0.6rem;
+}
+.card-title {
+  font-family:'Cinzel',serif;
+  font-size:0.95rem;
+  color:var(--gold-light);
+  line-height:1.5;
+  margin-bottom:0.7rem;
+  transition:color 0.3s;
+}
+.article-card:hover .card-title { color:var(--gold); }
+.card-excerpt {
+  font-size:0.82rem;
+  color:var(--text-dim);
+  line-height:1.8;
+  margin-bottom:1rem;
+}
+.card-footer {
+  display:flex; align-items:center; justify-content:space-between;
+  border-top:1px solid var(--border);
+  padding-top:0.8rem;
+}
+.card-date {
+  font-family:'Cinzel',serif;
+  font-size:0.58rem;
+  color:var(--mist);
+  letter-spacing:0.1em;
+}
+.card-read {
+  font-family:'Cinzel',serif;
+  font-size:0.58rem;
+  letter-spacing:0.15em;
+  text-transform:uppercase;
+  color:var(--gold-dim);
+  display:flex; align-items:center; gap:0.3rem;
+  transition:color 0.3s;
+}
+.article-card:hover .card-read { color:var(--gold); }
+
+/* ===== HISTORY TIMELINE ===== */
+#history {
+  padding:7rem 4rem;
+  background:var(--black);
+  overflow:hidden;
+}
+.timeline {
+  max-width:900px;
+  margin:0 auto;
+  position:relative;
+}
+.timeline::before {
+  content:'';
+  position:absolute; left:50%; top:0; bottom:0;
+  width:1px;
+  background:linear-gradient(180deg, transparent, var(--crimson), var(--gold-dim), transparent);
+  transform:translateX(-50%);
+}
+.timeline-item {
+  display:grid;
+  grid-template-columns:1fr 60px 1fr;
+  gap:0;
+  margin-bottom:3rem;
+  opacity:0;
+  transform:translateY(30px);
+  transition:all 0.6s;
+}
+.timeline-item.visible { opacity:1; transform:translateY(0); }
+.timeline-item:nth-child(even) .tl-content { grid-column:3; }
+.timeline-item:nth-child(even) .tl-empty { grid-column:1; }
+.tl-content {
+  padding:1.5rem;
+  background:var(--card);
+  border:1px solid var(--border);
+  position:relative;
+}
+.tl-content::before {
+  content:'';
+  position:absolute; top:1.5rem;
+  width:20px; height:1px;
+  background:var(--border);
+}
+.timeline-item:nth-child(odd) .tl-content::before { right:-20px; }
+.timeline-item:nth-child(even) .tl-content::before { left:-20px; }
+.tl-year {
+  font-family:'Cinzel Decorative',serif;
+  font-size:0.8rem;
+  color:var(--crimson);
+  margin-bottom:0.5rem;
+}
+.tl-title {
+  font-family:'Cinzel',serif;
+  font-size:0.95rem;
+  color:var(--gold-light);
+  margin-bottom:0.5rem;
+}
+.tl-text {
+  font-size:0.85rem;
+  color:var(--text-dim);
+  line-height:1.8;
+}
+.tl-dot {
+  display:flex; align-items:flex-start; justify-content:center;
+  padding-top:1.7rem;
+}
+.tl-dot-inner {
+  width:12px; height:12px;
+  background:var(--gold);
+  border-radius:50%;
+  border:2px solid var(--black);
+  box-shadow:0 0 12px var(--glow-gold);
+  position:relative; z-index:1;
+}
+
+/* ===== QUOTE SECTION ===== */
+#quote-section {
+  padding:6rem 4rem;
+  background:
+    linear-gradient(180deg, var(--black) 0%, rgba(60,0,0,0.08) 50%, var(--black) 100%);
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+}
+#quote-section::before {
+  content:'❝';
+  position:absolute;
+  font-family:'Cinzel Decorative',serif;
+  font-size:20rem;
+  color:rgba(139,0,0,0.04);
+  top:-2rem; left:2rem;
+  line-height:1;
+  pointer-events:none;
+}
+.blockquote-text {
+  font-family:'EB Garamond',serif;
+  font-style:italic;
+  font-size:clamp(1.2rem,2.5vw,1.8rem);
+  color:var(--text);
+  max-width:800px;
+  margin:0 auto 1.5rem;
+  line-height:1.7;
+}
+.blockquote-src {
+  font-family:'Cinzel',serif;
+  font-size:0.7rem;
+  letter-spacing:0.3em;
+  text-transform:uppercase;
+  color:var(--gold-dim);
+}
+
+/* ===== KNOWLEDGE PANEL ===== */
+#knowledge {
+  padding:7rem 4rem;
+  background:var(--deep);
+}
+.knowledge-grid {
+  max-width:1200px;
+  margin:0 auto;
+  display:grid;
+  grid-template-columns:1.4fr 1fr;
+  gap:3rem;
+  align-items:start;
+}
+.accordion { display:flex; flex-direction:column; gap:0.5rem; }
+.acc-item {
+  border:1px solid var(--border);
+  overflow:hidden;
+  transition:border-color 0.3s;
+}
+.acc-item.open { border-color:var(--crimson); }
+.acc-header {
+  padding:1.2rem 1.5rem;
+  display:flex; align-items:center; justify-content:space-between;
+  cursor:pointer;
+  background:var(--card);
+  transition:background 0.3s;
+}
+.acc-header:hover { background:rgba(139,0,0,0.06); }
+.acc-title {
+  font-family:'Cinzel',serif;
+  font-size:0.88rem;
+  color:var(--gold-light);
+  display:flex; align-items:center; gap:0.8rem;
+}
+.acc-icon-box { font-size:1rem; }
+.acc-arrow {
+  color:var(--gold-dim);
+  font-size:0.8rem;
+  transition:transform 0.3s;
+}
+.acc-item.open .acc-arrow { transform:rotate(180deg); color:var(--gold); }
+.acc-body {
+  max-height:0;
+  overflow:hidden;
+  transition:max-height 0.4s ease;
+}
+.acc-item.open .acc-body { max-height:400px; }
+.acc-content {
+  padding:1.2rem 1.5rem 1.5rem;
+  font-size:0.88rem;
+  color:var(--text-dim);
+  line-height:1.9;
+  border-top:1px solid var(--border);
+}
+.knowledge-aside {
+  display:flex; flex-direction:column; gap:1.5rem;
+}
+.aside-card {
+  background:var(--card);
+  border:1px solid var(--border);
+  padding:1.5rem;
+  position:relative;
+  overflow:hidden;
+}
+.aside-card::before {
+  content:'';
+  position:absolute; left:0; top:0; bottom:0;
+  width:2px;
+  background:linear-gradient(180deg, var(--crimson), var(--gold-dim));
+}
+.aside-title {
+  font-family:'Cinzel',serif;
+  font-size:0.78rem;
+  letter-spacing:0.15em;
+  text-transform:uppercase;
+  color:var(--gold);
+  margin-bottom:1rem;
+}
+.aside-list { list-style:none; display:flex; flex-direction:column; gap:0.5rem; }
+.aside-list li {
+  font-size:0.85rem;
+  color:var(--text-dim);
+  padding-left:1rem;
+  position:relative;
+  line-height:1.7;
+}
+.aside-list li::before {
+  content:'▸';
+  position:absolute; left:0;
+  color:var(--blood);
+  font-size:0.7rem;
+}
+
+/* ===== NEWSLETTER ===== */
+#newsletter {
+  padding:5rem 4rem;
+  background:var(--black);
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+}
+.newsletter-inner {
+  max-width:700px;
+  margin:0 auto;
+  text-align:center;
+}
+.nl-title {
+  font-family:'Cinzel Decorative',serif;
+  font-size:1.8rem;
+  color:var(--gold-light);
+  margin-bottom:0.8rem;
+}
+.nl-desc {
+  font-size:0.92rem;
+  color:var(--text-dim);
+  margin-bottom:2rem;
+  line-height:1.8;
+}
+.nl-form {
+  display:flex; gap:0;
+  max-width:480px;
+  margin:0 auto;
+}
+.nl-input {
+  flex:1;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-right:none;
+  padding:0.9rem 1.2rem;
+  color:var(--text);
+  font-family:'Noto Serif Bengali',serif;
+  font-size:0.9rem;
+  outline:none;
+  transition:border-color 0.3s;
+}
+.nl-input:focus { border-color:var(--gold-dim); }
+.nl-input::placeholder { color:var(--text-dim); }
+.nl-btn {
+  font-family:'Cinzel',serif;
+  font-size:0.7rem;
+  letter-spacing:0.2em;
+  text-transform:uppercase;
+  padding:0.9rem 1.5rem;
+  background:var(--crimson);
+  color:#fff;
+  border:1px solid var(--crimson);
+  cursor:pointer;
+  transition:all 0.3s;
+  white-space:nowrap;
+}
+.nl-btn:hover { background:var(--blood); box-shadow:0 0 20px var(--glow-red); }
+
+/* ===== FOOTER ===== */
+footer {
+  background:var(--deep);
+  padding:4rem 4rem 2rem;
+  position:relative; z-index:2;
+}
+.footer-grid {
+  max-width:1200px;
+  margin:0 auto;
+  display:grid;
+  grid-template-columns:2fr 1fr 1fr 1fr;
+  gap:3rem;
+  padding-bottom:3rem;
+  border-bottom:1px solid var(--border);
+  margin-bottom:2rem;
+}
+.footer-brand .nav-logo { margin-bottom:1rem; font-size:0.9rem; }
+.footer-about {
+  font-size:0.85rem;
+  color:var(--text-dim);
+  line-height:1.9;
+}
+.footer-col-title {
+  font-family:'Cinzel',serif;
+  font-size:0.7rem;
+  letter-spacing:0.25em;
+  text-transform:uppercase;
+  color:var(--gold-dim);
+  margin-bottom:1.2rem;
+}
+.footer-links { list-style:none; display:flex; flex-direction:column; gap:0.6rem; }
+.footer-links a {
+  font-size:0.85rem;
+  color:var(--text-dim);
+  text-decoration:none;
+  transition:color 0.3s;
+}
+.footer-links a:hover { color:var(--gold); }
+.footer-bottom {
+  max-width:1200px;
+  margin:0 auto;
+  display:flex; align-items:center; justify-content:space-between;
+  font-family:'Cinzel',serif;
+  font-size:0.62rem;
+  letter-spacing:0.15em;
+  color:var(--mist);
+}
+.footer-sigils { display:flex; gap:1rem; font-size:1.2rem; opacity:0.4; }
+
+/* ===== MODAL ===== */
+.modal-overlay {
+  position:fixed; inset:0;
+  background:rgba(0,0,0,0.92);
+  z-index:9000;
+  display:flex; align-items:center; justify-content:center;
+  padding:2rem;
+  opacity:0; pointer-events:none;
+  transition:opacity 0.3s;
+  backdrop-filter:blur(8px);
+}
+.modal-overlay.open { opacity:1; pointer-events:all; }
+.modal-box {
+  background:var(--card);
+  border:1px solid var(--border);
+  max-width:700px;
+  width:100%;
+  max-height:85vh;
+  overflow-y:auto;
+  position:relative;
+  transform:translateY(20px);
+  transition:transform 0.3s;
+}
+.modal-overlay.open .modal-box { transform:translateY(0); }
+.modal-header {
+  padding:2rem 2rem 1.5rem;
+  border-bottom:1px solid var(--border);
+  position:sticky; top:0;
+  background:var(--card);
+  z-index:1;
+  display:flex; align-items:start; justify-content:space-between; gap:1rem;
+}
+.modal-close {
+  background:none; border:none;
+  color:var(--mist);
+  font-size:1.2rem;
+  cursor:pointer;
+  transition:color 0.2s;
+  flex-shrink:0;
+  margin-top:0.2rem;
+}
+.modal-close:hover { color:var(--gold); }
+.modal-title {
+  font-family:'Cinzel',serif;
+  font-size:1.3rem;
+  color:var(--gold-light);
+  line-height:1.4;
+}
+.modal-body { padding:2rem; }
+.modal-body p {
+  font-size:0.92rem;
+  color:var(--text-dim);
+  line-height:2;
+  margin-bottom:1.2rem;
+}
+.modal-body h3 {
+  font-family:'Cinzel',serif;
+  font-size:0.9rem;
+  color:var(--gold);
+  margin:1.5rem 0 0.8rem;
+  letter-spacing:0.08em;
+}
+.modal-tag-row { display:flex; flex-wrap:wrap; gap:0.5rem; margin-bottom:1.5rem; }
+
+/* ===== TOP PROGRESS BAR ===== */
+#progress-bar {
+  position:fixed; top:0; left:0; height:2px;
+  background:linear-gradient(90deg, var(--crimson), var(--gold));
+  width:0%;
+  z-index:99999;
+  transition:width 0.1s;
+  box-shadow:0 0 8px var(--glow-red);
+}
+
+/* ===== BACK TO TOP ===== */
+#back-top {
+  position:fixed; bottom:2rem; right:2rem;
+  width:44px; height:44px;
+  background:var(--crimson);
+  color:#fff;
+  font-size:1rem;
+  display:flex; align-items:center; justify-content:center;
+  border:none; cursor:pointer;
+  opacity:0; transform:translateY(10px);
+  transition:all 0.3s;
+  z-index:800;
+  box-shadow:0 0 20px var(--glow-red);
+}
+#back-top.show { opacity:1; transform:translateY(0); }
+#back-top:hover { background:var(--blood); }
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(25px); }
+  to { opacity:1; transform:translateY(0); }
+}
+.reveal {
+  opacity:0; transform:translateY(30px);
+  transition:all 0.7s ease;
+}
+.reveal.visible { opacity:1; transform:translateY(0); }
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:1024px) {
+  nav { padding:0 2rem; }
+  #categories, #featured, #archive, #history, #knowledge, #newsletter, footer { padding-left:2rem; padding-right:2rem; }
+  .categories-grid { grid-template-columns:repeat(2,1fr); }
+  .archive-grid { grid-template-columns:repeat(2,1fr); }
+  .featured-inner { grid-template-columns:1fr; }
+  .featured-visual { min-height:200px; }
+  .featured-body { border-left:none; border-top:1px solid var(--border); }
+  .knowledge-grid { grid-template-columns:1fr; }
+  .footer-grid { grid-template-columns:1fr 1fr; }
+  .stats-strip { grid-template-columns:repeat(2,1fr); }
+  .stat-item:nth-child(2) { border-right:none; }
+  .stat-item:nth-child(3) { border-top:1px solid var(--border); }
+}
+@media(max-width:768px) {
+  .nav-links, .nav-cta { display:none; }
+  .burger { display:flex; }
+  .archive-grid { grid-template-columns:1fr; }
+  .categories-grid { grid-template-columns:1fr; }
+  .timeline::before { left:20px; }
+  .timeline-item { grid-template-columns:40px 1fr; }
+  .timeline-item:nth-child(even) .tl-content { grid-column:2; }
+  .timeline-item:nth-child(even) .tl-empty { display:none; }
+  .tl-content::before { left:-20px !important; right:auto !important; }
+  .stats-strip { grid-template-columns:1fr 1fr; }
+  .footer-grid { grid-template-columns:1fr; gap:2rem; }
+  .footer-bottom { flex-direction:column; gap:1rem; text-align:center; }
+  .nl-form { flex-direction:column; }
+  .nl-input { border-right:1px solid var(--border); }
+}
+</style>
+</head>
+<body>
+
+<!-- PROGRESS BAR -->
+<div id="progress-bar"></div>
+
+<!-- CURSOR -->
+<div id="cursor"></div>
+<div id="cursor-trail"></div>
+
+<!-- PARTICLES -->
+<canvas id="particles-canvas"></canvas>
+
+<!-- BACK TO TOP -->
+<button id="back-top" title="উপরে যান">↑</button>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h2 class="modal-title" id="modal-title">শিরোনাম</h2>
+      <button class="modal-close" id="modal-close">✕</button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+
+<!-- NAVBAR -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">
+    <span class="sigil">☽</span>
+    অন্ধকারের আর্কাইভ
+  </a>
+  <ul class="nav-links">
+    <li><a href="#categories">বিভাগ</a></li>
+    <li><a href="#archive">আর্কাইভ</a></li>
+    <li><a href="#history">ইতিহাস</a></li>
+    <li><a href="#knowledge">জ্ঞানকোষ</a></li>
+    <li><a href="#newsletter">যোগ দিন</a></li>
+  </ul>
+  <a href="#newsletter" class="nav-cta">নিউজলেটার</a>
+  <div class="burger" id="burger">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <svg class="hero-sigil" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="200" cy="200" r="190" stroke="#c9a84c" stroke-width="0.5"/>
+    <circle cx="200" cy="200" r="150" stroke="#8b0000" stroke-width="0.5"/>
+    <circle cx="200" cy="200" r="110" stroke="#c9a84c" stroke-width="0.5"/>
+    <polygon points="200,30 370,290 30,290" stroke="#c9a84c" stroke-width="0.7" fill="none"/>
+    <polygon points="200,370 30,110 370,110" stroke="#8b0000" stroke-width="0.7" fill="none"/>
+    <circle cx="200" cy="200" r="8" stroke="#c9a84c" stroke-width="1" fill="none"/>
+    <line x1="200" y1="10" x2="200" y2="390" stroke="#c9a84c" stroke-width="0.3"/>
+    <line x1="10" y1="200" x2="390" y2="200" stroke="#c9a84c" stroke-width="0.3"/>
+    <line x1="55" y1="55" x2="345" y2="345" stroke="#8b0000" stroke-width="0.3"/>
+    <line x1="345" y1="55" x2="55" y2="345" stroke="#8b0000" stroke-width="0.3"/>
+  </svg>
+  <div class="hero-content">
+    <p class="hero-eyebrow">⸻ নিষিদ্ধ জ্ঞানের দরজা ⸻</p>
+    <h1 class="hero-title">অন্ধকারের<br>আর্কাইভ</h1>
+    <p class="hero-subtitle">কালো যাদু · কুফরি · রহস্যময় বিদ্যা</p>
+    <p class="hero-desc">
+      শতাব্দীর পর শতাব্দী ধরে লুকিয়ে রাখা অন্ধকার বিদ্যার ইতিহাস, বিশ্লেষণ ও রহস্য উন্মোচন। 
+      ধর্মীয়, ঐতিহাসিক ও বৈজ্ঞানিক দৃষ্টিকোণ থেকে কালো যাদুর গভীর অন্বেষণ।
+    </p>
+    <div class="hero-buttons">
+      <a href="#archive" class="btn-primary"><span>আর্কাইভ দেখুন</span></a>
+      <a href="#categories" class="btn-outline">বিভাগসমূহ</a>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <span>স্ক্রল করুন</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- STATS STRIP -->
+<div class="stats-strip reveal">
+  <div class="stat-item">
+    <span class="stat-num" data-target="147">0</span>
+    <span class="stat-label">প্রবন্ধ</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num" data-target="12">0</span>
+    <span class="stat-label">বিভাগ</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num" data-target="38">0</span>
+    <span class="stat-label">কেস স্টাডি</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num" data-target="5000">0</span>
+    <span class="stat-label">পাঠক</span>
+  </div>
+</div>
+
+<!-- CATEGORIES -->
+<section id="categories">
+  <div class="section-header reveal">
+    <span class="section-tag">⸻ বিষয়ভিত্তিক অন্বেষণ ⸻</span>
+    <h2 class="section-title">বিভাগসমূহ</h2>
+    <div class="section-line"></div>
+    <p class="section-desc">কালো যাদু ও কুফরির বিভিন্ন শাখা-প্রশাখা নিয়ে গভীর গবেষণামূলক প্রবন্ধ</p>
+  </div>
+  <div class="categories-grid reveal">
+    <div class="cat-card" onclick="openModal('sihr')">
+      <span class="cat-badge">ইসলামিক</span>
+      <span class="cat-icon">☽</span>
+      <h3 class="cat-name">সিহর ও জাদুটোনা</h3>
+      <p class="cat-desc">ইসলামি দৃষ্টিকোণে সিহরের সংজ্ঞা, প্রকারভেদ, ইতিহাস এবং এর বিরুদ্ধে আধ্যাত্মিক প্রতিরোধ।</p>
+    </div>
+    <div class="cat-card" onclick="openModal('voodoo')">
+      <span class="cat-badge">আফ্রিকান</span>
+      <span class="cat-icon">🩸</span>
+      <h3 class="cat-name">ভুডু ও ওবিয়া</h3>
+      <p class="cat-desc">পশ্চিম আফ্রিকা থেকে হাইতি পর্যন্ত ভুডু বিদ্যার বিস্তার, আচার-অনুষ্ঠান ও রহস্যময় কেস।</p>
+    </div>
+    <div class="cat-card" onclick="openModal('grimoire')">
+      <span class="cat-badge">ইউরোপীয়</span>
+      <span class="cat-icon">📜</span>
+      <h3 class="cat-name">গ্রিমোয়ার ও নিষিদ্ধ গ্রন্থ</h3>
+      <p class="cat-desc">ইতিহাসের সবচেয়ে বিখ্যাত নিষিদ্ধ জাদুবিদ্যার বই — নেক্রোনোমিকন থেকে Key of Solomon পর্যন্ত।</p>
+    </div>
+    <div class="cat-card" onclick="openModal('kufri')">
+      <span class="cat-badge">ধর্মতত্ত্ব</span>
+      <span class="cat-icon">⚡</span>
+      <h3 class="cat-name">কুফরি ও শিরক</h3>
+      <p class="cat-desc">ইসলামে কুফরির বিভিন্ন স্তর, শিরকের ধরন এবং কীভাবে জাদুবিদ্যা কুফরির অন্তর্ভুক্ত।</p>
+    </div>
+    <div class="cat-card" onclick="openModal('witch')">
+      <span class="cat-badge">ইউরোপীয়</span>
+      <span class="cat-icon">🌙</span>
+      <h3 class="cat-name">উইচক্র্যাফট ও উইক্কা</h3>
+      <p class="cat-desc">মধ্যযুগীয় ইউরোপে ডাকিনীবিদ্যার উৎপত্তি, ডাইনি শিকার ও আধুনিক নব্য-বিক্কা আন্দোলন।</p>
+    </div>
+    <div class="cat-card" onclick="openModal('psychology')">
+      <span class="cat-badge">বিজ্ঞান</span>
+      <span class="cat-icon">🧠</span>
+      <h3 class="cat-name">মনোবিজ্ঞান ও ব্যাখ্যা</h3>
+      <p class="cat-desc">বিজ্ঞান কীভাবে জাদুর দাবিগুলো ব্যাখ্যা করে — নোসেবো ইফেক্ট, মাস হিস্টেরিয়া ও মনোসংযোগ।</p>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURED -->
+<section id="featured">
+  <div class="section-header reveal">
+    <span class="section-tag">⸻ বিশেষ প্রতিবেদন ⸻</span>
+    <h2 class="section-title">প্রধান প্রবন্ধ</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="featured-inner reveal" style="cursor:pointer" onclick="openModal('featured-main')">
+    <div class="featured-visual">
+      <span class="featured-label">বিশেষ সংখ্যা</span>
+      <span class="featured-sigil">⛧</span>
+    </div>
+    <div class="featured-body">
+      <p class="feat-meta">গভীর বিশ্লেষণ · ১৫ মিনিট পড়া</p>
+      <h2 class="feat-title">সলোমনের চাবিকাঠি: মধ্যযুগের সবচেয়ে বিপজ্জনক জাদুর গ্রন্থের ভেতরে</h2>
+      <p class="feat-excerpt">
+        তের শতকে লেখা এই গ্রিমোয়ারটি পোপ ইনোসেন্ট অষ্টম থেকে শুরু করে নাৎসি গোয়েন্দা সংস্থা পর্যন্ত সকলেই খুঁজেছিল। 
+        এতে কী আছে যা এটিকে এতটা ভয়ংকর করে তুলেছিল?
+      </p>
+      <div class="feat-tags">
+        <span class="tag">গ্রিমোয়ার</span>
+        <span class="tag">মধ্যযুগ</span>
+        <span class="tag">ইউরোপীয় জাদু</span>
+        <span class="tag">নিষিদ্ধ গ্রন্থ</span>
+      </div>
+      <a class="btn-primary" style="display:inline-block;text-decoration:none"><span>সম্পূর্ণ পড়ুন →</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ARCHIVE -->
+<section id="archive">
+  <div class="section-header reveal">
+    <span class="section-tag">⸻ জ্ঞানের ভাণ্ডার ⸻</span>
+    <h2 class="section-title">প্রবন্ধ আর্কাইভ</h2>
+    <div class="section-line"></div>
+    <p class="section-desc">অন্ধকারের রহস্যময় জগতের গভীরে ডুব দিন</p>
+  </div>
+  <div class="archive-toolbar reveal">
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="search-input" placeholder="প্রবন্ধ খুঁজুন...">
+    </div>
+    <div class="filter-btns">
+      <button class="filter-btn active" data-filter="all">সব</button>
+      <button class="filter-btn" data-filter="sihr">সিহর</button>
+      <button class="filter-btn" data-filter="history">ইতিহাস</button>
+      <button class="filter-btn" data-filter="science">বিজ্ঞান</button>
+      <button class="filter-btn" data-filter="kufri">কুফরি</button>
+    </div>
+  </div>
+  <div class="archive-grid reveal" id="archive-grid">
+    <!-- Cards injected by JS -->
+  </div>
+</section>
+
+<!-- HISTORY TIMELINE -->
+<section id="history">
+  <div class="section-header reveal">
+    <span class="section-tag">⸻ কালের সাক্ষী ⸻</span>
+    <h2 class="section-title">অন্ধকারের ইতিহাস</h2>
+    <div class="section-line"></div>
+    <p class="section-desc">পৃথিবীর ইতিহাসে কালো যাদু ও কুফরির গুরুত্বপূর্ণ মাইলফলক</p>
+  </div>
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="tl-content">
+        <p class="tl-year">৩০০০ খ্রি.পূ.</p>
+        <h3 class="tl-title">মেসোপটেমিয়ার মন্ত্রশাস্ত্র</h3>
+        <p class="tl-text">সুমেরীয় ও ব্যাবিলনীয় সভ্যতায় মাকলু সিরিজ — বিশ্বের প্রাচীনতম জাদুনিবারণ প্রার্থনাপুস্তক রচিত হয়।</p>
+      </div>
+      <div class="tl-dot"><div class="tl-dot-inner"></div></div>
+      <div></div>
+    </div>
+    <div class="timeline-item">
+      <div></div>
+      <div class="tl-dot"><div class="tl-dot-inner"></div></div>
+      <div class="tl-content">
+        <p class="tl-year">৯৫০ খ্রি.</p>
+        <h3 class="tl-title">Key of Solomon রচনা</h3>
+        <p class="tl-text">বাইজান্টাইন সাম্রাজ্যে সর্বপ্রথম "Claviculum Salomonis" বা সলোমনের চাবিকাঠি রচিত — যা পরবর্তী ৫০০ বছর জাদুর কেন্দ্রীয় গ্রন্থ হয়ে ওঠে।</p>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="tl-content">
+        <p class="tl-year">১৪৮৭ খ্রি.</p>
+        <h3 class="tl-title">Malleus Maleficarum প্রকাশ</h3>
+        <p class="tl-text">ডাইনি শিকারের বাইবেল হিসেবে পরিচিত এই গ্রন্থ ইউরোপে প্রায় ৬০,০০০ মানুষকে মৃত্যুদণ্ডে পাঠায়।</p>
+      </div>
+      <div class="tl-dot"><div class="tl-dot-inner"></div></div>
+      <div></div>
+    </div>
+    <div class="timeline-item">
+      <div></div>
+      <div class="tl-dot"><div class="tl-dot-inner"></div></div>
+      <div class="tl-content">
+        <p class="tl-year">১৬৯২ খ্রি.</p>
+        <h3 class="tl-title">সেলেম ডাইনি বিচার</h3>
+        <p class="tl-text">ম্যাসাচুসেটসে ২০ জন নিরীহ মানুষ "ডাইনি" অভিযোগে ফাঁসিতে ঝোলে — ইতিহাসের সবচেয়ে কুখ্যাত ধর্মীয় উন্মাদনার ঘটনা।</p>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="tl-content">
+        <p class="tl-year">১৮৭৫ খ্রি.</p>
+        <h3 class="tl-title">Hermetic Order of the Golden Dawn</h3>
+        <p class="tl-text">লন্ডনে প্রতিষ্ঠিত এই গোপন সংগঠন আধুনিক পাশ্চাত্য জাদুবিদ্যার ভিত্তি স্থাপন করে।</p>
+      </div>
+      <div class="tl-dot"><div class="tl-dot-inner"></div></div>
+      <div></div>
+    </div>
+    <div class="timeline-item">
+      <div></div>
+      <div class="tl-dot"><div class="tl-dot-inner"></div></div>
+      <div class="tl-content">
+        <p class="tl-year">১৯৬৬ খ্রি.</p>
+        <h3 class="tl-title">Church of Satan প্রতিষ্ঠা</h3>
+        <p class="tl-text">Anton LaVey সান ফ্রান্সিসকোতে Church of Satan প্রতিষ্ঠা করেন এবং Satanic Bible লেখেন — আধুনিক কালো যাদুর সবচেয়ে বিতর্কিত অধ্যায়।</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- QUOTE -->
+<section id="quote-section" class="reveal">
+  <blockquote>
+    <p class="blockquote-text">"যে জাদুবিদ্যা শেখে সে জানুক — সে নিজের জন্য আখিরাতের কোনো অংশ রাখেনি।"</p>
+    <footer class="blockquote-src">— সহিহ বুখারী, হাদিস নং ৬৭৩৭</footer>
+  </blockquote>
+</section>
+
+<!-- KNOWLEDGE -->
+<section id="knowledge">
+  <div class="section-header reveal">
+    <span class="section-tag">⸻ প্রশ্নোত্তর ও জ্ঞানকোষ ⸻</span>
+    <h2 class="section-title">সাধারণ জিজ্ঞাসা</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="knowledge-grid reveal">
+    <div class="accordion" id="accordion">
+      <div class="acc-item">
+        <div class="acc-header" onclick="toggleAcc(this)">
+          <span class="acc-title"><span class="acc-icon-box">☽</span> কালো যাদু ও সাদা যাদুর পার্থক্য কী?</span>
+          <span class="acc-arrow">▾</span>
+        </div>
+        <div class="acc-body">
+          <p class="acc-content">ঐতিহ্যগতভাবে "সাদা যাদু" নিরাময় ও উপকারের জন্য এবং "কালো যাদু" ক্ষতি ও নিয়ন্ত্রণের জন্য ব্যবহৃত বলে মনে করা হয়। তবে ইসলামি দৃষ্টিকোণে উভয়ই হারাম — কারণ উভয়ই আল্লাহর অনুমতি ছাড়া অলৌকিক শক্তি দাবি করে এবং প্রায়ই শয়তানের সহায়তায় করা হয়।</p>
+        </div>
+      </div>
+      <div class="acc-item">
+        <div class="acc-header" onclick="toggleAcc(this)">
+          <span class="acc-title"><span class="acc-icon-box">⚡</span> সিহর কি সত্যিই কাজ করে?</span>
+          <span class="acc-arrow">▾</span>
+        </div>
+        <div class="acc-body">
+          <p class="acc-content">ইসলামি আলেমদের মতে সিহর বাস্তব এবং এটি আল্লাহর অনুমতিতে মানুষের ক্ষতি করতে পারে। কুরআনে সূরা বাকারার ১০২ নম্বর আয়াতে হারুত ও মারুতের ঘটনায় এটি স্পষ্ট। বৈজ্ঞানিকভাবে "নোসেবো ইফেক্ট" — অর্থাৎ বিশ্বাসের কারণে শারীরিক ক্ষতি — কিছু ঘটনা ব্যাখ্যা করতে পারলেও সব ক্ষেত্রে নয়।</p>
+        </div>
+      </div>
+      <div class="acc-item">
+        <div class="acc-header" onclick="toggleAcc(this)">
+          <span class="acc-title"><span class="acc-icon-box">📜</span> নেক্রোনোমিকন কি সত্যিকারের বই?</span>
+          <span class="acc-arrow">▾</span>
+        </div>
+        <div class="acc-body">
+          <p class="acc-content">মূল "Necronomicon" ছিল H.P. Lovecraft-এর ১৯২৪ সালের কল্পকাহিনীর সৃষ্টি। তবে ১৯৭৭ সালে Simon নামক লেখক একটি বাস্তব Necronomicon প্রকাশ করেন যা সুমেরীয় মিথোলজি ও Lovecraft-এর কল্পকাহিনী মিশিয়ে তৈরি। এটি কোনো প্রাচীন গ্রন্থ নয়।</p>
+        </div>
+      </div>
+      <div class="acc-item">
+        <div class="acc-header" onclick="toggleAcc(this)">
+          <span class="acc-title"><span class="acc-icon-box">🩸</span> ভুডু পুতুল কি কাজ করে?</span>
+          <span class="acc-arrow">▾</span>
+        </div>
+        <div class="acc-body">
+          <p class="acc-content">ভুডু পুতুল মূলত হাইতিয়ান ভুডু সংস্কৃতির অংশ, তবে হলিউড একে ভুলভাবে চিত্রিত করেছে। ঐতিহ্যবাহী ভুডু অনুশীলনকারীরা পুতুল ব্যবহার করেন নিরাময় ও ইতিবাচক আচারের জন্য। ক্ষতির জন্য পুতুল ব্যবহারের দাবি মূলত পশ্চিমা মিথ এবং মিডিয়ার অতিরঞ্জন।</p>
+        </div>
+      </div>
+      <div class="acc-item">
+        <div class="acc-header" onclick="toggleAcc(this)">
+          <span class="acc-title"><span class="acc-icon-box">🌙</span> সেলেম ডাইনি বিচারের আসল কারণ কী ছিল?</span>
+          <span class="acc-arrow">▾</span>
+        </div>
+        <div class="acc-body">
+          <p class="acc-content">১৬৯২ সালের সেলেম ডাইনি বিচারের পেছনে ছিল: এরগট ছত্রাকে দূষিত রাই শস্য খাওয়ার ফলে হ্যালুসিনেশন, ধর্মীয় গোঁড়ামি, প্রতিবেশী দ্বন্দ্ব, সম্পত্তি বিরোধ এবং সামাজিক উত্তেজনা। আধুনিক ইতিহাসবিদরা এটিকে সামাজিক ও মনস্তাত্ত্বিক উন্মাদনার ঘটনা হিসেবে দেখেন।</p>
+        </div>
+      </div>
+    </div>
+    <div class="knowledge-aside">
+      <div class="aside-card">
+        <h3 class="aside-title">📚 পাঠ তালিকা</h3>
+        <ul class="aside-list">
+          <li>The Magus — Francis Barrett (১৮০১)</li>
+          <li>Occult Philosophy — Heinrich Cornelius Agrippa</li>
+          <li>The Golden Bough — James Frazer</li>
+          <li>Magic, Science and Religion — Bronisław Malinowski</li>
+          <li>যাদু ও জিন — আব্দুল্লাহ আল-গামিদি</li>
+        </ul>
+      </div>
+      <div class="aside-card">
+        <h3 class="aside-title">⚠️ ইসলামি সতর্কতা</h3>
+        <ul class="aside-list">
+          <li>জাদুবিদ্যা ইসলামে সম্পূর্ণ হারাম</li>
+          <li>জাদুকরের কাছে যাওয়া কবিরা গুনাহ</li>
+          <li>রুকইয়া শরইয়া একমাত্র বৈধ পথ</li>
+          <li>আয়াতুল কুরসি সবচেয়ে শক্তিশালী সুরক্ষা</li>
+          <li>সুরা ফালাক ও নাস পাঠ অবশ্যক</li>
+        </ul>
+      </div>
+      <div class="aside-card">
+        <h3 class="aside-title">🌍 বিশ্বের জাদু-ঐতিহ্য</h3>
+        <ul class="aside-list">
+          <li>হাইতি — ভুডু (Vodou)</li>
+          <li>ব্রাজিল — কান্দম্বলে ও উম্বান্দা</li>
+          <li>নাইজেরিয়া — ইফা ওরাকল</li>
+          <li>ইউরোপ — উইচক্র্যাফট ও হার্মেটিসিজম</li>
+          <li>ভারত — তান্ত্রিক বিদ্যা</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NEWSLETTER -->
+<section id="newsletter">
+  <div class="newsletter-inner reveal">
+    <h2 class="nl-title">নিষিদ্ধ জ্ঞানের সন্ধান পান</h2>
+    <p class="nl-desc">প্রতি সপ্তাহে নতুন প্রবন্ধ, কেস স্টাডি ও অন্ধকারের অজানা রহস্য সরাসরি আপনার ইমেইলে।</p>
+    <div class="nl-form">
+      <input class="nl-input" type="email" placeholder="আপনার ইমেইল ঠিকানা..." id="nl-email">
+      <button class="nl-btn" onclick="subscribe()">সদস্য হন</button>
+    </div>
+    <p id="nl-msg" style="margin-top:1rem;font-size:0.85rem;color:var(--gold);display:none">✓ আপনি সফলভাবে যুক্ত হয়েছেন</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="#" class="nav-logo">
+        <span class="sigil">☽</span> অন্ধকারের আর্কাইভ
+      </a>
+      <p class="footer-about">
+        কালো যাদু ও কুফরির ইতিহাস, বিশ্লেষণ ও রহস্য উন্মোচনের একটি গবেষণামূলক প্ল্যাটফর্ম। 
+        এই সাইটের উদ্দেশ্য জ্ঞান ও সচেতনতা — কোনো অন্ধকার বিদ্যার প্রচার নয়।
+      </p>
+    </div>
+    <div>
+      <h4 class="footer-col-title">বিভাগ</h4>
+      <ul class="footer-links">
+        <li><a href="#categories">সিহর ও জাদুটোনা</a></li>
+        <li><a href="#categories">ভুডু ও ওবিয়া</a></li>
+        <li><a href="#categories">গ্রিমোয়ার</a></li>
+        <li><a href="#categories">কুফরি ও শিরক</a></li>
+        <li><a href="#categories">উইচক্র্যাফট</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 class="footer-col-title">সম্পদ</h4>
+      <ul class="footer-links">
+        <li><a href="#archive">আর্কাইভ</a></li>
+        <li><a href="#history">ইতিহাস</a></li>
+        <li><a href="#knowledge">জ্ঞানকোষ</a></li>
+        <li><a href="#knowledge">পাঠ তালিকা</a></li>
+        <li><a href="#newsletter">নিউজলেটার</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 class="footer-col-title">তথ্য</h4>
+      <ul class="footer-links">
+        <li><a href="#">আমাদের সম্পর্কে</a></li>
+        <li><a href="#">গবেষণা পদ্ধতি</a></li>
+        <li><a href="#">গোপনীয়তা নীতি</a></li>
+        <li><a href="#">যোগাযোগ</a></li>
+        <li><a href="#">দাবিত্যাগ</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© ২০২৫ অন্ধকারের আর্কাইভ · সমস্ত অধিকার সংরক্ষিত</span>
+    <div class="footer-sigils">☽ ⛧ ☿ ♄ ✦</div>
+    <span>শিক্ষামূলক ও গবেষণামূলক উদ্দেশ্যে নির্মিত</span>
+  </div>
+</footer>
+
+<script>
+/* ===== CURSOR ===== */
+const cursor = document.getElementById('cursor');
+const trail = document.getElementById('cursor-trail');
+let mx=0, my=0, tx=0, ty=0;
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cursor.style.left = mx+'px'; cursor.style.top = my+'px';
+});
+function animTrail() {
+  tx += (mx-tx)*0.12; ty += (my-ty)*0.12;
+  trail.style.left = tx+'px'; trail.style.top = ty+'px';
+  requestAnimationFrame(animTrail);
+}
+animTrail();
+
+/* ===== PARTICLES ===== */
+const canvas = document.getElementById('particles-canvas');
+const ctx = canvas.getContext('2d');
+let W, H, pts=[];
+function resize() { W=canvas.width=window.innerWidth; H=canvas.height=window.innerHeight; }
+resize(); window.addEventListener('resize', resize);
+class Particle {
+  constructor() { this.reset(); }
+  reset() {
+    this.x = Math.random()*W; this.y = Math.random()*H;
+    this.r = Math.random()*1.5+0.3;
+    this.vx = (Math.random()-0.5)*0.3; this.vy = -Math.random()*0.4-0.1;
+    this.life = 0; this.maxLife = Math.random()*200+100;
+    this.color = Math.random()<0.6 ? `rgba(201,168,76,` : `rgba(139,0,0,`;
+  }
+  draw() {
+    this.life++;
+    if(this.life>this.maxLife) this.reset();
+    const a = Math.sin(this.life/this.maxLife*Math.PI)*0.7;
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.r, 0, Math.PI*2);
+    ctx.fillStyle = this.color+a+')';
+    ctx.fill();
+    this.x+=this.vx; this.y+=this.vy;
+  }
+}
+for(let i=0;i<120;i++) { const p=new Particle(); p.life=Math.random()*p.maxLife; pts.push(p); }
+function animParts() { ctx.clearRect(0,0,W,H); pts.forEach(p=>p.draw()); requestAnimationFrame(animParts); }
+animParts();
+
+/* ===== NAVBAR SCROLL ===== */
+const navbar = document.getElementById('navbar');
+const progressBar = document.getElementById('progress-bar');
+const backTop = document.getElementById('back-top');
+window.addEventListener('scroll', () => {
+  const st = window.scrollY;
+  navbar.classList.toggle('scrolled', st>50);
+  backTop.classList.toggle('show', st>400);
+  const total = document.body.scrollHeight - window.innerHeight;
+  progressBar.style.width = (st/total*100)+'%';
+  // Reveal
+  document.querySelectorAll('.reveal, .timeline-item').forEach(el => {
+    if(el.getBoundingClientRect().top < window.innerHeight*0.88) el.classList.add('visible');
+  });
+});
+
+/* ===== BACK TO TOP ===== */
+backTop.addEventListener('click', () => window.scrollTo({top:0,behavior:'smooth'}));
+
+/* ===== COUNT UP ===== */
+function countUp(el) {
+  const target = +el.dataset.target;
+  let current = 0;
+  const inc = target/60;
+  const timer = setInterval(() => {
+    current = Math.min(current+inc, target);
+    el.textContent = Math.floor(current)+(target>=1000?'+':'');
+    if(current>=target) clearInterval(timer);
+  }, 25);
+}
+const statObserver = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) { countUp(e.target); statObserver.unobserve(e.target); }});
+},{threshold:0.5});
+document.querySelectorAll('.stat-num').forEach(el => statObserver.observe(el));
+
+/* ===== ACCORDION ===== */
+function toggleAcc(header) {
+  const item = header.parentElement;
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.acc-item').forEach(i=>i.classList.remove('open'));
+  if(!isOpen) item.classList.add('open');
+}
+
+/* ===== FILTER + SEARCH ===== */
+const articles = [
+  { id:'sihr-asas', cat:'sihr', title:'সিহরের মৌলিক ধারণা ও ইসলামি দৃষ্টিভঙ্গি', excerpt:'কুরআন ও হাদিসের আলোকে সিহরের সংজ্ঞা, এটি কেন কুফরি এবং আক্রান্ত ব্যক্তির জন্য কী করণীয়।', date:'১৫ নভেম্বর, ২০২৪', icon:'☽', color:'linear-gradient(135deg,rgba(50,0,30,0.8),rgba(10,6,8,0.95))', tags:['সিহর','ইসলাম','কুফরি'] },
+  { id:'evil-eye', cat:'sihr', title:'নজর লাগা: কুরআনি ব্যাখ্যা ও বৈজ্ঞানিক সাক্ষ্য', excerpt:'আইনুল হাসাদ বা বদনজর কি সত্যিই মানুষের ক্ষতি করতে পারে? হাদিসের ঘটনা ও আধুনিক গবেষণা।', date:'২ ডিসেম্বর, ২০২৪', icon:'👁', color:'linear-gradient(135deg,rgba(0,30,50,0.8),rgba(10,6,8,0.95))', tags:['নজর','হাদিস','বিজ্ঞান'] },
+  { id:'salem', cat:'history', title:'সেলেম ডাইনি বিচার: ইতিহাসের সবচেয়ে অন্ধকার অধ্যায়', excerpt:'১৬৯২ সালে ম্যাসাচুসেটসে কীভাবে ২০ জন নিরীহ মানুষকে ডাইনি বলে মারা হয়েছিল — পূর্ণাঙ্গ বিশ্লেষণ।', date:'৮ জানুয়ারি, ২০২৫', icon:'⚰', color:'linear-gradient(135deg,rgba(20,10,0,0.8),rgba(10,6,8,0.95))', tags:['ইতিহাস','সেলেম','উইচক্র্যাফট'] },
+  { id:'nocebo', cat:'science', title:'নোসেবো ইফেক্ট: বিশ্বাস কীভাবে মানুষকে মেরে ফেলে', excerpt:'বিজ্ঞান প্রমাণ করেছে যে কোনো কিছু ক্ষতি করবে এই বিশ্বাসই শরীরে বাস্তব ক্ষতি করতে পারে।', date:'২০ জানুয়ারি, ২০২৫', icon:'🧠', color:'linear-gradient(135deg,rgba(0,20,40,0.8),rgba(10,6,8,0.95))', tags:['বিজ্ঞান','মনোবিজ্ঞান','নোসেবো'] },
+  { id:'kufri-types', cat:'kufri', title:'কুফরির প্রকারভেদ: আলেমদের দৃষ্টিকোণ', excerpt:'কুফরে আকবর ও কুফরে আসগার — ইসলামে বিশ্বাস ভঙ্গের বিভিন্ন স্তর এবং কালো যাদুর সাথে সম্পর্ক।', date:'৫ ফেব্রুয়ারি, ২০২৫', icon:'⚡', color:'linear-gradient(135deg,rgba(40,5,0,0.8),rgba(10,6,8,0.95))', tags:['কুফরি','শিরক','ফিকহ'] },
+  { id:'haitian-voodoo', cat:'history', title:'হাইতিয়ান ভুডু: ধর্ম, নাকি জাদু?', excerpt:'হাইতির দাস বিপ্লবে ভুডুর ভূমিকা, জম্বি মিথের আসল সত্য এবং আধুনিক হাইতিতে ভুডুর অবস্থান।', date:'১৮ ফেব্রুয়ারি, ২০২৫', icon:'🩸', color:'linear-gradient(135deg,rgba(30,0,20,0.8),rgba(10,6,8,0.95))', tags:['ভুডু','হাইতি','ইতিহাস'] },
+];
+
+function renderCards(data) {
+  const grid = document.getElementById('archive-grid');
+  grid.innerHTML = data.length ? data.map(a=>`
+    <div class="article-card" data-cat="${a.cat}" onclick="openModal('${a.id}')">
+      <div class="card-visual">
+        <div class="card-visual-bg" style="background:${a.color}"></div>
+        <span style="position:relative;z-index:1;filter:drop-shadow(0 0 10px rgba(201,168,76,0.4))">${a.icon}</span>
+      </div>
+      <div class="card-body">
+        <p class="card-category">${a.tags[0]}</p>
+        <h3 class="card-title">${a.title}</h3>
+        <p class="card-excerpt">${a.excerpt}</p>
+        <div class="card-footer">
+          <span class="card-date">${a.date}</span>
+          <span class="card-read">পড়ুন →</span>
+        </div>
+      </div>
+    </div>
+  `).join('') : '<p style="color:var(--text-dim);grid-column:1/-1;text-align:center;padding:3rem">কোনো ফলাফল পাওয়া যায়নি</p>';
+}
+
+let currentFilter = 'all';
+function applyFilter() {
+  const q = document.getElementById('search-input').value.toLowerCase();
+  const filtered = articles.filter(a =>
+    (currentFilter==='all' || a.cat===currentFilter) &&
+    (a.title.toLowerCase().includes(q) || a.excerpt.toLowerCase().includes(q))
+  );
+  renderCards(filtered);
+}
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    currentFilter = btn.dataset.filter;
+    applyFilter();
+  });
+});
+document.getElementById('search-input').addEventListener('input', applyFilter);
+renderCards(articles);
+
+/* ===== MODAL DATA ===== */
+const modalData = {
+  'sihr': { title:'সিহর ও জাদুটোনা — সম্পূর্ণ গাইড', body:`<div class="modal-tag-row"><span class="tag">ইসলামিক</span><span class="tag">কুফরি</span><span class="tag">রুকইয়া</span></div><p>সিহর (السحر) আরবি শব্দ, যার অর্থ জাদু বা যাদুবিদ্যা। ইসলামি শরিয়তে এটি সম্পূর্ণ হারাম এবং কবিরা গুনাহের অন্তর্ভুক্ত।</p><h3>সিহরের প্রকারভেদ</h3><p>ইমাম ইবন কুদামা মাকদিসি সিহরকে কয়েকটি ভাগে ভাগ করেছেন: (১) গিরো বা বন্ধন সিহর, যা মানুষের মন বা শরীরকে আটকে রাখে; (২) প্রেম সিহর, যা দুই মানুষের মধ্যে অস্বাভাবিক আকর্ষণ তৈরি করে; (৩) বিচ্ছেদ সিহর, যা স্বামী-স্ত্রীর মধ্যে ঘৃণা তৈরি করে; (৪) রোগ সিহর, যা শারীরিক অসুস্থতা তৈরি করে।</p><h3>ইসলামে সিহরের বিধান</h3><p>সূরা বাকারার ১০২ নম্বর আয়াতে আল্লাহ স্পষ্ট করেছেন যে জাদু শেখা কুফরি। যে ব্যক্তি জাদু করে সে শয়তানের সাথে চুক্তি করে। জাদু শেখা, শেখানো, করা এবং অন্যকে দিয়ে করানো — সবই হারাম।</p><h3>সুরক্ষার উপায়</h3><p>রুকইয়া শরইয়া — কুরআনের আয়াত ও দুআ দিয়ে চিকিৎসা — একমাত্র ইসলামসম্মত পথ। সূরা ফালাক, নাস, ইখলাস ও আয়াতুল কুরসি নিয়মিত পাঠ সিহর থেকে সুরক্ষা দেয়।</p>` },
+  'voodoo': { title:'ভুডু ও ওবিয়া — আফ্রিকান রহস্যবিদ্যা', body:`<div class="modal-tag-row"><span class="tag">আফ্রিকান</span><span class="tag">হাইতি</span><span class="tag">ধর্ম</span></div><p>ভুডু (Vodou) মূলত পশ্চিম আফ্রিকার বেনিন রাজ্যের ফন ও এউ জনগোষ্ঠীর ধর্মীয় ঐতিহ্য। দাস ব্যবসার মাধ্যমে এটি হাইতিতে পৌঁছায় এবং ক্যাথলিক ধর্মের সাথে মিশে হাইতিয়ান ভুডুতে রূপান্তরিত হয়।</p><h3>লোয়া — আত্মাসমূহ</h3><p>ভুডুতে সর্বোচ্চ সত্তা হলেন Bondye (Good God), যিনি সরাসরি মানুষের সাথে যোগাযোগ করেন না। লোয়া (Loa) হলো মধ্যবর্তী আত্মাসমূহ — যেমন Erzulie (প্রেমের দেবী), Baron Samedi (মৃত্যুর দেবতা)।</p><h3>জম্বি মিথের আসল সত্য</h3><p>বাস্তবে জম্বি তৈরিতে Tetrodotoxin (পাফার মাছের বিষ) ব্যবহার করা হতো, যা মানুষকে মৃত-সদৃশ অচেতন অবস্থায় ফেলে দেয়। পরে তাকে "জাগিয়ে" শ্রমিক হিসেবে ব্যবহার করা হতো।</p>` },
+  'grimoire': { title:'গ্রিমোয়ার — নিষিদ্ধ জাদুর গ্রন্থসমূহ', body:`<div class="modal-tag-row"><span class="tag">ইউরোপীয়</span><span class="tag">মধ্যযুগ</span><span class="tag">ইতিহাস</span></div><p>গ্রিমোয়ার (Grimoire) ফরাসি শব্দ grammaire থেকে এসেছে, অর্থ ব্যাকরণ বই। মধ্যযুগে এই শব্দটি জাদু বিষয়ক রহস্যময় গ্রন্থকে বোঝাতে শুরু করে।</p><h3>সবচেয়ে বিখ্যাত গ্রিমোয়ারসমূহ</h3><p><strong>Key of Solomon (১০ম শতক):</strong> সবচেয়ে প্রভাবশালী জাদুর গ্রন্থ — শয়তান ও দেবদূত নিয়ন্ত্রণের পদ্ধতি বর্ণিত।</p><p><strong>The Grand Grimoire (১৭০০ খ্রি.):</strong> "Red Dragon" নামেও পরিচিত, শয়তান লুসিফেরের সাথে চুক্তির পদ্ধতি দাবি করে।</p><p><strong>Book of Abramelin (১৪৫৮ খ্রি.):</strong> ১৮ মাসের আধ্যাত্মিক সাধনার মাধ্যমে পবিত্র জ্ঞান অর্জনের দাবিদার এই গ্রন্থ।</p><h3>আধুনিক প্রভাব</h3><p>এই গ্রন্থগুলো আলিস্টার ক্রাউলি, Golden Dawn সংগঠন এবং আধুনিক Wicca আন্দোলনকে গভীরভাবে প্রভাবিত করেছে।</p>` },
+  'kufri': { title:'কুফরি ও শিরক — ইসলামের দৃষ্টিতে', body:`<div class="modal-tag-row"><span class="tag">ইসলাম</span><span class="tag">আকিদা</span><span class="tag">ফিকহ</span></div><p>কুফর (كفر) শব্দের আভিধানিক অর্থ ঢেকে রাখা বা অস্বীকার করা। ইসলামি পরিভাষায় এটি আল্লাহ বা তাঁর দ্বীনের কোনো মৌলিক বিষয় অস্বীকার করাকে বোঝায়।</p><h3>কুফরের প্রধান প্রকারভেদ</h3><p><strong>কুফরে তাকজিব:</strong> আল্লাহ বা রাসূলকে মিথ্যা প্রতিপন্ন করা। <strong>কুফরে ইবা:</strong> জানার পরেও অস্বীকার করা (ইবলিসের মতো)। <strong>কুফরে নিফাক:</strong> মুখে ইমান কিন্তু অন্তরে কুফর।</p><h3>জাদু কেন কুফরি?</h3><p>সূরা বাকারা ১০২: "সুলায়মান কুফরি করেননি, বরং শয়তানরাই কুফরি করেছিল — তারা মানুষকে জাদু শেখাত।" এই আয়াত স্পষ্ট করে যে জাদু অনুশীলন শয়তানের পথ এবং কুফরির অন্তর্ভুক্ত।</p>` },
+  'witch': { title:'উইচক্র্যাফট ও উইক্কা — ইউরোপীয় ডাকিনীবিদ্যা', body:`<div class="modal-tag-row"><span class="tag">ইউরোপ</span><span class="tag">মধ্যযুগ</span><span class="tag">নব্য-ধর্ম</span></div><p>ইউরোপে উইচক্র্যাফটের ইতিহাস অত্যন্ত জটিল। মধ্যযুগীয় ডাইনি শিকার মূলত রাজনৈতিক ও সামাজিক নিপীড়নের হাতিয়ার হিসেবে ব্যবহৃত হয়েছিল।</p><h3>ডাইনি শিকারের যুগ (১৪৫০-১৭৫০)</h3><p>তিন শতাব্দীব্যাপী এই উন্মাদনায় ইউরোপে আনুমানিক ৪০,০০০ থেকে ৬০,০০০ মানুষকে মৃত্যুদণ্ড দেওয়া হয়। এদের বেশিরভাগ ছিল বয়স্ক একা মহিলা, ধাত্রী বা প্রান্তিক মানুষ।</p><h3>আধুনিক উইক্কা</h3><p>১৯৫৪ সালে Gerald Gardner আধুনিক Wicca আন্দোলন শুরু করেন। এটি একটি নব্য-পৌত্তলিক ধর্ম যা প্রকৃতি পূজা, চন্দ্র চক্র এবং জাদুকরী আচারের উপর নির্ভরশীল।</p>` },
+  'psychology': { title:'মনোবিজ্ঞান ও বিজ্ঞানের দৃষ্টিতে জাদু', body:`<div class="modal-tag-row"><span class="tag">বিজ্ঞান</span><span class="tag">মনোবিজ্ঞান</span><span class="tag">বিশ্লেষণ</span></div><p>বিজ্ঞান জাদুর অনেক দাবিকে বিভিন্ন প্রাকৃতিক ব্যাখ্যা দিয়ে বোঝানোর চেষ্টা করে, তবে সব ঘটনা বিজ্ঞান দিয়ে ব্যাখ্যা করা সম্ভব নয়।</p><h3>নোসেবো ইফেক্ট</h3><p>প্লাসেবো-র বিপরীত নোসেবো ইফেক্টে বিশ্বাসের কারণে বাস্তব ক্ষতি হয়। গবেষণায় দেখা গেছে, কেউ যদি বিশ্বাস করে তাকে অভিশাপ দেওয়া হয়েছে, তার রক্তচাপ বৃদ্ধি ও রোগ প্রতিরোধ ক্ষমতা কমে যায়।</p><h3>মাস হিস্টেরিয়া</h3><p>১৯৬২ সালের তানজানিয়া হাসির মহামারি, বা সেলেম ডাইনি বিচার — এগুলো সামাজিক উন্মাদনার উদাহরণ যেখানে বিশ্বাস ও পরিবেশের চাপে পুরো সম্প্রদায় একই উপসর্গ দেখায়।</p><h3>কগনিটিভ বায়াস</h3><p>মানুষের মস্তিষ্ক প্যাটার্ন খোঁজে এবং কাকতালীয় ঘটনাকে কারণ-ফল সম্পর্ক মনে করে (Apophenia)। এই কারণে জাদুর "প্রমাণ" প্রায়ই কাকতালীয়।</p>` },
+  'sihr-asas': { title:'সিহরের মৌলিক ধারণা ও ইসলামি দৃষ্টিভঙ্গি', body:`<p>ইসলামি শরিয়তে সিহর শুধু হারাম নয়, এটি সাতটি মহা ধ্বংসকারী পাপের (সাব্আ মুবিকাত) অন্যতম। হাদিসে নবী ﷺ বলেছেন — "তোমরা সাতটি ধ্বংসকারী জিনিস থেকে বাঁচো, তার মধ্যে সিহর একটি।" (বুখারি ও মুসলিম)</p><h3>সিহর চেনার উপায়</h3><p>আলেমগণ সিহরের কিছু লক্ষণ উল্লেখ করেছেন: অকারণ স্বামী-স্ত্রীর ঝগড়া, অস্বাভাবিক স্বপ্ন, শরীরে ব্যাখ্যাহীন ব্যথা, নামাজে মনোযোগ দিতে না পারা। তবে এগুলো নিশ্চিত প্রমাণ নয় — ডাক্তারি পরীক্ষাও করাতে হবে।</p><h3>রুকইয়া চিকিৎসা</h3><p>সুনান আবু দাউদে বর্ণিত — আয়াতুল কুরসি, সূরা ফালাক ও নাস পাঠ সিহরের বিরুদ্ধে সবচেয়ে কার্যকর। নিয়মিত সকাল-সন্ধ্যার আজকার পড়লে জাদু সাধারণত কাজ করে না।</p>` },
+  'evil-eye': { title:'নজর লাগা — বৈজ্ঞানিক ও ইসলামি বিশ্লেষণ', body:`<p>আইনুল হাসাদ বা বদনজর ইসলামে স্বীকৃত বাস্তবতা। নবী ﷺ বলেছেন — "আইন (বদনজর) সত্য।" (মুসলিম, হাদিস ২১৮৮)</p><h3>কীভাবে কাজ করে?</h3><p>একজন মানুষের মুগ্ধ দৃষ্টি বা ঈর্ষামিশ্রিত প্রশংসা আল্লাহর অনুমতিতে অপরের ক্ষতি করতে পারে। এটি সিহর থেকে আলাদা — এখানে ইচ্ছাকৃত জাদুর প্রয়োজন নেই।</p><h3>বিজ্ঞান কী বলে?</h3><p>Mirror neuron এবং psychosomatic effects কিছু ক্ষেত্রে ব্যাখ্যা দিতে পারে, তবে সব ক্ষেত্রে বৈজ্ঞানিক ব্যাখ্যা নেই। এটি ইমানের বিষয় — সরাসরি কুরআন-হাদিসে উল্লিখিত।</p>` },
+  'salem': { title:'সেলেম ডাইনি বিচার ১৬৯২', body:`<p>ফেব্রুয়ারি ১৬৯২ সালে ম্যাসাচুসেটসের সেলেম গ্রামে নয় বছরের বেটি প্যারিস ও তার কাজিন আবিগেইল উইলিয়ামস অদ্ভুত আচরণ শুরু করে — খিঁচুনি, চিৎকার, শরীর বাঁকানো।</p><h3>অভিযোগের তরঙ্গ</h3><p>দুই মাসে ২০০ এরও বেশি মানুষকে ডাইনি বলে অভিযুক্ত করা হয়। বিচারে ২০ জনকে মৃত্যুদণ্ড দেওয়া হয় — ১৯ জনকে ফাঁসিতে ঝোলানো হয়, ১ জন মারা যায় পাথর চাপা দিয়ে।</p><h3>আসল কারণ</h3><p>ঐতিহাসিকরা বিশ্বাস করেন এরগট ছত্রাক (Claviceps purpurea) দূষিত রাই শস্য খেয়ে প্রাথমিক উপসর্গ হয়েছিল। এর সাথে ছিল পিউরিটান ধর্মীয় উদ্বেগ, পারস্পরিক সম্পত্তি বিরোধ এবং সামাজিক উত্তেজনা।</p>` },
+  'nocebo': { title:'নোসেবো ইফেক্ট — বিশ্বাসের অন্ধকার শক্তি', body:`<p>১৯৬১ সালে Walter Kennedy প্রথম "nocebo" শব্দটি ব্যবহার করেন, যার অর্থ ল্যাটিনে "I shall harm"। প্লাসেবোর যেমন ইতিবাচক প্রভাব, নোসেবো হলো নেতিবাচক বিশ্বাসের বাস্তব ক্ষতি।</p><h3>গবেষণা প্রমাণ</h3><p>২০১৩ সালের একটি গবেষণায় দেখা গেছে, রোগীদের যদি বলা হয় "এই ওষুধে পার্শ্বপ্রতিক্রিয়া হতে পারে", তারা সুগার পিল খেয়েও সেই পার্শ্বপ্রতিক্রিয়া অনুভব করেন।</p><h3>ভুডু মৃত্যু</h3><p>অ্যান্থ্রোপোলজিস্ট Walter Cannon ১৯৪২ সালে "ভুডু মৃত্যু" ডকুমেন্ট করেন — যেখানে আদিবাসী জনগোষ্ঠীর সদস্যরা শুধু বিশ্বাসের কারণে মারা যেত। হাইপারঅ্যাক্টিভ স্ট্রেস রেসপন্স অঙ্গ বিকল করে।</p>` },
+  'kufri-types': { title:'কুফরির প্রকারভেদ — বিশদ আলোচনা', body:`<p>আলেমরা কুফরিকে দুটি প্রধান ভাগে ভাগ করেন: কুফরে আকবর (মহা কুফরি) যা ইসলাম থেকে বের করে দেয়, এবং কুফরে আসগার (ক্ষুদ্র কুফরি) যা ইমানকে দুর্বল করে।</p><h3>জাদু ও কুফরির সম্পর্ক</h3><p>শাইখুল ইসলাম ইবন তাইমিয়া বলেন, অধিকাংশ জাদুর জন্য শয়তানের সাহায্য নিতে হয়, যা শিরক ও কুফরির পর্যায়ে পড়ে। যে জাদুকরের কাছে যায় এবং তাকে বিশ্বাস করে, সে কুরআনের অস্বীকারকারী।</p>` },
+  'haitian-voodoo': { title:'হাইতিয়ান ভুডু — ইতিহাস ও রহস্য', body:`<p>হাইতিয়ান ভুডু বা Vodou পশ্চিম আফ্রিকান আধ্যাত্মিক ঐতিহ্য এবং ক্যাথলিক খ্রিষ্টধর্মের সংমিশ্রণ। দাস ব্যবসায় আফ্রিকা থেকে আনা মানুষেরা নিজেদের বিশ্বাস ধরে রাখতে এই হাইব্রিড ধর্ম গড়েছিল।</p><h3>১৭৯১ সালের বিপ্লব</h3><p>আগস্ট ১৭৯১ সালে Bois Caïman ভুডু অনুষ্ঠানের মধ্যে দিয়ে হাইতির দাসরা বিদ্রোহের শপথ নেয়। ১৮০৪ সালে হাইতি পৃথিবীর প্রথম কৃষ্ণাঙ্গ প্রজাতন্ত্র হিসেবে স্বাধীনতা পায়।</p><h3>জম্বির বৈজ্ঞানিক ব্যাখ্যা</h3><p>হার্ভার্ড নৃতত্ত্ববিদ Wade Davis ১৯৮৫ সালে গবেষণা করে দেখান Tetrodotoxin ও Datura stramonium মিশিয়ে তৈরি পাউডার মানুষকে জম্বি-সদৃশ অবস্থায় ফেলতে পারে।</p>` },
+  'featured-main': { title:'সলোমনের চাবিকাঠি — ইতিহাসের সবচেয়ে বিপজ্জনক গ্রিমোয়ার', body:`<div class="modal-tag-row"><span class="tag">গ্রিমোয়ার</span><span class="tag">মধ্যযুগ</span><span class="tag">ইউরোপীয় জাদু</span><span class="tag">নিষিদ্ধ গ্রন্থ</span></div><p>Key of Solomon বা Claviculum Salomonis — এই নামটি জাদুর ইতিহাসে সবচেয়ে ভয়ংকর ও প্রভাবশালী। ধারণা করা হয় নবী সুলায়মান (আ.) নিজে এটি লিখেছিলেন — যদিও এই দাবি সম্পূর্ণ মিথ্যা এবং এটি ইসলামবিরোধী একটি প্রচারণা।</p><h3>গ্রন্থের উৎপত্তি</h3><p>সবচেয়ে প্রাচীন পাণ্ডুলিপি ১০ম-১১শ শতকের বাইজান্টিয়ামে পাওয়া যায়। এটি গ্রিক ও হিব্রুতে রচিত এবং পরবর্তীতে ল্যাটিনে অনুবাদ করা হয়।</p><h3>বিষয়বস্তু</h3><p>বইটিতে ৭২টি দানব বা "গোয়েটিক স্পিরিট" আহ্বান করার পদ্ধতি, জাদুকরী বৃত্ত আঁকার নিয়ম, তাবিজ ও পেন্টাকেল তৈরির পদ্ধতি এবং বিভিন্ন উদ্দেশ্যে আত্মা নিয়ন্ত্রণের দাবিকৃত কৌশল রয়েছে।</p><h3>ঐতিহাসিক প্রভাব</h3><p>১৫শ থেকে ১৭শ শতকের ইউরোপে যে হাজার হাজার মানুষকে জাদুকর সন্দেহে পুড়িয়ে মারা হয়েছিল, তাদের অনেকের বিরুদ্ধে এই বইয়ের কপি রাখার অভিযোগ আনা হয়েছিল।</p><h3>ইসলামি দৃষ্টিভঙ্গি</h3><p>নবী সুলায়মান (আ.) ছিলেন আল্লাহর নবী — তিনি কখনো কুফরি জাদু শেখাননি। সূরা বাকারার ১০২ আয়াতে আল্লাহ নিজেই বলেছেন "সুলায়মান কুফরি করেননি।" এই বইটি তাঁর নামে মিথ্যা রচনা।</p>` },
+};
+
+function openModal(id) {
+  const data = modalData[id];
+  if(!data) return;
+  document.getElementById('modal-title').textContent = data.title;
+  document.getElementById('modal-body').innerHTML = data.body;
+  document.getElementById('modal-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+document.getElementById('modal-close').addEventListener('click', closeModal);
+document.getElementById('modal-overlay').addEventListener('click', e => { if(e.target===e.currentTarget) closeModal(); });
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => { if(e.key==='Escape') closeModal(); });
+
+/* ===== NEWSLETTER ===== */
+function subscribe() {
+  const email = document.getElementById('nl-email').value;
+  if(!email || !email.includes('@')) { document.getElementById('nl-email').style.borderColor='var(--blood)'; return; }
+  document.getElementById('nl-msg').style.display = 'block';
+  document.getElementById('nl-email').value = '';
+  document.getElementById('nl-email').style.borderColor = 'var(--border)';
+}
+
+/* ===== INITIAL REVEAL ===== */
+setTimeout(()=>{
+  document.querySelectorAll('.reveal, .timeline-item').forEach(el => {
+    if(el.getBoundingClientRect().top < window.innerHeight*0.88) el.classList.add('visible');
+  });
+}, 100);
+</script>
+</body>
+</html>
